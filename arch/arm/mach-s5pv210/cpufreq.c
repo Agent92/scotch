@@ -475,7 +475,7 @@ static int s5pv210_target(struct cpufreq_policy *policy,
 		{
 			if (policy->user_policy.max == 1200000)
 			{
-				s5pv210_set_refresh(DMC1, 220000);
+				s5pv210_set_refresh(DMC1, 240000);
 			} //raised 220MHz FSB
 			else  	s5pv210_set_refresh(DMC1, 200000); //Not OC'ing so keep 200MHz FSB	}
 		}
