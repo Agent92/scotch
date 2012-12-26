@@ -258,7 +258,7 @@ static int s5pv210_target(struct cpufreq_policy *policy,
 	arm_volt = dvs_conf[index].arm_volt;
 	int_volt = dvs_conf[index].int_volt;
 
-	/* Increase voltages for FSB if 1.1GHz is selected */
+	/* Increase voltages for FSB if 1.2GHz is selected */
 	if ((policy->user_policy.max == 1200000) && (index != L1) && (index != L6))
 	    int_volt += 50000;
 
@@ -475,7 +475,7 @@ static int s5pv210_target(struct cpufreq_policy *policy,
 		{
 			if (policy->user_policy.max == 1200000)
 			{
-				s5pv210_set_refresh(DMC1, 240000);
+				s5pv210_set_refresh(DMC1, 220000);
 			} //raised 220MHz FSB
 			else  	s5pv210_set_refresh(DMC1, 200000); //Not OC'ing so keep 200MHz FSB	}
 		}
@@ -499,12 +499,12 @@ static int s5pv210_target(struct cpufreq_policy *policy,
 		{
 			/*
 			 * DMC0 : 166Mhz
-			 * DMC1 : 200MHz or 240Mhz if OC'ing to 1200MHz CPU (L1)
+			 * DMC1 : 200MHz or 220Mhz if OC'ing to 1200MHz CPU (L1)
 			 */
 			s5pv210_set_refresh(DMC0, 166000);
 			if (policy->user_policy.max == 1200000)
 			{
-				s5pv210_set_refresh(DMC1, 240000); //raised 220MHz FSB
+				s5pv210_set_refresh(DMC1, 220000); //raised 220MHz FSB
 			}
 			else
 			{
@@ -584,7 +584,7 @@ void customvoltage_updateintvolt(unsigned long * int_voltages)
 	int i;
 
 	mutex_lock(&set_freq_lock);
-	for (i = 0; i < 2; i++) {  // only allow int volts for 1.2GHz and 1.2GHz
+	for (i = 0; i < 2; i++) {  // only allow int volts for 1.2GHz and 1.45GHz
 		if (int_voltages[i] > int_volt_max)
 		    int_voltages[i] = int_volt_max;
 		dvs_conf[i].int_volt = int_voltages[i];
@@ -795,7 +795,7 @@ finish:
 
 	return cpufreq_register_driver(&s5pv210_driver);
 }
-/* dave */
+
 static struct platform_driver s5pv210_cpufreq_drv = {
 	.probe		= s5pv210_cpufreq_probe,
 	.driver		= {
