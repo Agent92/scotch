@@ -101,7 +101,7 @@
 
 #include "herring.h"
 
-#define lcd_or_amoled_fq  56  //screen refresh rate
+#define lcd_or_amoled_fq  60  //screen refresh rate
 
 struct class *sec_class;
 EXPORT_SYMBOL(sec_class);
@@ -377,12 +377,7 @@ static struct s3cfb_lcd r61408 = {
 	},
 };
 
-<<<<<<< HEAD
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC0 (5120 * SZ_1K)
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC2 (5120 * SZ_1K)
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0 (9216 * SZ_1K) // (11Mb 11264) (13MB 13312) 
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1 (9216 * SZ_1K) // 11MB will work on Slim Bean
-=======
+
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC0_BM (0 * SZ_1K)
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC2_BM (0 * SZ_1K)
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0_BM (0 * SZ_1K)
@@ -390,14 +385,14 @@ static struct s3cfb_lcd r61408 = {
 
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC0_LM (5000 * SZ_1K)
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC2_LM (5000 * SZ_1K)
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0_LM (13312 * SZ_1K)
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1_LM (13312 * SZ_1K) // 13MB okay for everyone
+#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0_LM (9216 * SZ_1K)
+#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1_LM (9216 * SZ_1K) // 13MB okay for everyone
 
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC0 (5000 * SZ_1K)
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC2 (5000 * SZ_1K)
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0 (11264 * SZ_1K)
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1 (11264 * SZ_1K) // 11MB okay for some, e.g. CM
->>>>>>> bedalus/bedalus7.3
+#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0 (9216 * SZ_1K)
+#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1 (9216 * SZ_1K) // 11MB okay for some, e.g. CM
+
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMD (S5PV210_LCD_WIDTH * \
 					     S5PV210_LCD_HEIGHT * 4 * \
 					     (CONFIG_FB_S3C_NR_BUFFERS + \
@@ -453,16 +448,16 @@ static struct s5p_media_device herring_media_devs[] = {
 #ifdef CONFIG_CPU_FREQ
 static struct s5pv210_cpufreq_voltage smdkc110_cpufreq_volt[] = {
 	{
-		.freq	= 1320000,
-		.varm	= 1350000,
-		.vint	= 1100000,
+		.freq	= 1375000,
+		.varm	= 1400000,
+		.vint	= 1200000,
 	}, {
-		.freq	= 1096000,
+		.freq	= 1250000,
 		.varm	= 1300000,
 		.vint	= 1150000,
 	}, {
 		.freq	= 1000000,
-		.varm	= 1275000,
+		.varm	= 1250000,
 		.vint	= 1100000,
 	}, {
 		.freq	=  800000,
