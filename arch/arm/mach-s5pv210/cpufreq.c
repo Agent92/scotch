@@ -32,13 +32,9 @@ static struct clk *dmc1_clk;
 static struct cpufreq_freqs freqs;
 static DEFINE_MUTEX(set_freq_lock);
 
-<<<<<<< HEAD
-#define APLL_VAL_1450	((1<<31)|(175<<16)|(3<<8)|(1))
-#define APLL_VAL_1200    ((1<<31)|(150<<16)|(3<<8)|(1))
-=======
-#define APLL_VAL_1320    ((1<<31)|(165<<16)|(3<<8)|(1))
-#define APLL_VAL_1096  	((1<<31)|(137<<16)|(3<<8)|(1))
->>>>>>> bedalus/bedalus7.3
+
+#define APLL_VAL_1375    ((1<<31)|(165<<16)|(3<<8)|(1))
+#define APLL_VAL_1250    ((1<<31)|(150<<16)|(3<<8)|(1))
 #define APLL_VAL_1000	((1<<31)|(125<<16)|(3<<8)|(1))
 #define APLL_VAL_800	((1<<31)|(100<<16)|(3<<8)|(1))
 
@@ -83,13 +79,9 @@ enum s5pv210_dmc_port {
 };
 
 static struct cpufreq_frequency_table s5pv210_freq_table[] = {
-<<<<<<< HEAD
-	{L0, 1450*1000},
-	{L1, 1200*1000},
-=======
-	{L0, 1320*1000},
-	{L1, 1096*1000},
->>>>>>> bedalus/bedalus7.3
+
+	{L0, 1375*1000},
+	{L1, 1250*1000},
 	{L2, 1000*1000},
 	{L3, 800*1000},
    	{L4, 400*1000},
@@ -115,13 +107,9 @@ const unsigned long int_volt_max = 1300000;
 
 static struct s5pv210_dvs_conf dvs_conf[] = {
 	[L0] = {
-<<<<<<< HEAD
-		.arm_volt   = 1450000,
-		.int_volt   = 1200000,
-=======
+
 		.arm_volt   = 1350000,
 		.int_volt   = 1150000,
->>>>>>> bedalus/bedalus7.3
 		},
 	[L1] = {
 		.arm_volt   = 1300000,
@@ -154,13 +142,10 @@ static u32 clkdiv_val[7][11] = {
 	 * HCLK_DSYS, PCLK_DSYS, HCLK_PSYS, PCLK_PSYS, ONEDRAM,
 	 * MFC, G3D }
 	 */
-<<<<<<< HEAD
-	/* L0 : [1450/200/200/100][166/83][133/66][200/200] */
+
+	/* L0 : [1375/200/200/100][166/83][133/66][200/200] */
 	{0, 6, 6, 1, 3, 1, 4, 1, 3, 0, 0},
-	/* L1 : [1200/200/200/100][166/83][133/66][200/200] i.e. morfic's T11 config*/
-=======
-	/* L0 : [1320/200/200/100][166/83][133/66][200/200] */
->>>>>>> bedalus/bedalus7.3
+	/* L1 : [1250/200/200/100][166/83][133/66][200/200] */
 	{0, 5, 5, 1, 3, 1, 4, 1, 3, 0, 0},
 	/* L2 : [1000/200/200/100][166/83][133/66][200/200] */
 	{0, 4, 4, 1, 3, 1, 4, 1, 3, 0, 0},
@@ -267,28 +252,20 @@ static int s5pv210_target(struct cpufreq_policy *policy,
 	/* If we select OC, prevent 1GHz */
 	if (index == L2)
 	{
-<<<<<<< HEAD
-		if (policy->user_policy.max == 1200000)
+
+		if (policy->user_policy.max >= 1250000)
 			index = L1;
-		if ((index == L1) && (policy->user_policy.max == 1450000))
-			index = L0;
-=======
-		if (policy->user_policy.max >= 1100000)
-			index = L1;
->>>>>>> bedalus/bedalus7.3
+
 		freqs.new = s5pv210_freq_table[index].frequency;		
 	}
 
 	arm_volt = dvs_conf[index].arm_volt;
 	int_volt = dvs_conf[index].int_volt;
 
-<<<<<<< HEAD
-	/* Increase voltages for FSB if 1.2GHz is selected */
-	if ((policy->user_policy.max == 1200000) && (index != L1) && (index != L6))
-=======
-	/* Increase voltages for FSB if 1.1GHz is selected */
-	if ((policy->user_policy.max >= 1100000) && (index != L0) && (index != L1) && (index !=L6))
->>>>>>> bedalus/bedalus7.3
+
+	/* Increase voltages for FSB if 1.25GHz is selected */
+	if ((policy->user_policy.max >= 1250000) && (index != L0) && (index != L1) && (index !=L6))
+
 	    int_volt += 50000;
 
 	if (freqs.new > freqs.old) {
@@ -432,18 +409,15 @@ static int s5pv210_target(struct cpufreq_policy *policy,
         switch ( index ) {
 
 		case L0:
-<<<<<<< HEAD
-		/* APLL FOUT becomes 1450 Mhz */
-		__raw_writel(APLL_VAL_1450, S5P_APLL_CON);
-=======
-		/* APLL FOUT becomes 1320 Mhz */
-		__raw_writel(APLL_VAL_1320, S5P_APLL_CON);
->>>>>>> bedalus/bedalus7.3
+
+		/* APLL FOUT becomes 1375 Mhz */
+		__raw_writel(APLL_VAL_1375, S5P_APLL_CON);
+
 		break;            
 
 		case L1:
-		/* APLL FOUT becomes 1200 Mhz */
-		__raw_writel(APLL_VAL_1200, S5P_APLL_CON);
+		/* APLL FOUT becomes 1250 Mhz */
+		__raw_writel(APLL_VAL_1250, S5P_APLL_CON);
 		break;            
 		
 		case L2:
@@ -507,11 +481,9 @@ static int s5pv210_target(struct cpufreq_policy *policy,
 		 */
 		if (!bus_speed_changing)
 		{
-<<<<<<< HEAD
-			if (policy->user_policy.max == 1200000)
-=======
-			if (policy->user_policy.max >= 1100000)
->>>>>>> bedalus/bedalus7.3
+
+			if (policy->user_policy.max >= 1250000)
+
 			{
 				s5pv210_set_refresh(DMC1, 220000);
 			} //raised 220MHz FSB
@@ -537,14 +509,12 @@ static int s5pv210_target(struct cpufreq_policy *policy,
 		{
 			/*
 			 * DMC0 : 166Mhz
-			 * DMC1 : 200MHz or 220Mhz if OC'ing to 1200MHz CPU (L1)
+			 * DMC1 : 200MHz or 220Mhz if OC'ing to 1250MHz CPU (L1)
 			 */
 			s5pv210_set_refresh(DMC0, 166000);
-<<<<<<< HEAD
-			if (policy->user_policy.max == 1200000)
-=======
-			if (policy->user_policy.max >= 1100000)
->>>>>>> bedalus/bedalus7.3
+
+			if (policy->user_policy.max >= 1250000)
+
 			{
 				s5pv210_set_refresh(DMC1, 220000); //raised 220MHz FSB
 			}
