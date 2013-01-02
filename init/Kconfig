@@ -30,17 +30,17 @@ config IRQ_WORK
 menu "General setup"
 
 config SCHED_BFS
-bool "BFS cpu scheduler"
----help---
-The Brain Fuck CPU Scheduler for excellent interactivity and
-responsiveness on the desktop and solid scalability on normal
+	bool "BFS cpu scheduler"
+	---help---
+	  The Brain Fuck CPU Scheduler for excellent interactivity and
+	  responsiveness on the desktop and solid scalability on normal
           hardware. Not recommended for 4096 CPUs.
 
-Currently incompatible with the Group CPU scheduler, and RCU TORTURE
+	  Currently incompatible with the Group CPU scheduler, and RCU TORTURE
           TEST so these options are disabled.
 
           Say Y here.
-default y
+	default y
 
 config EXPERIMENTAL
 	bool "Prompt for development and/or incomplete code/drivers"
@@ -1422,3 +1422,4 @@ config PADATA
 	bool
 
 source "kernel/Kconfig.locks"
+
