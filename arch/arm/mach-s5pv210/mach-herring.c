@@ -101,7 +101,7 @@
 
 #include "herring.h"
 
-#define lcd_or_amoled_fq  60  //screen refresh rate
+#define lcd_or_amoled_fq  56  //screen refresh rate
 
 struct class *sec_class;
 EXPORT_SYMBOL(sec_class);
@@ -385,13 +385,13 @@ static struct s3cfb_lcd r61408 = {
 
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC0_LM (5000 * SZ_1K)
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC2_LM (5000 * SZ_1K)
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0_LM (9216 * SZ_1K)
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1_LM (9216 * SZ_1K) // 13MB okay for everyone
+#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0_LM (10240 * SZ_1K)
+#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1_LM (10240 * SZ_1K) // 13MB okay for everyone
 
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC0 (5000 * SZ_1K)
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC2 (5000 * SZ_1K)
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0 (9216 * SZ_1K)
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1 (9216 * SZ_1K) // 11MB okay for some, e.g. CM
+#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0 (10240 * SZ_1K)
+#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1 (10240 * SZ_1K) // 11MB okay for some, e.g. CM
 
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMD (S5PV210_LCD_WIDTH * \
 					     S5PV210_LCD_HEIGHT * 4 * \
@@ -448,11 +448,11 @@ static struct s5p_media_device herring_media_devs[] = {
 #ifdef CONFIG_CPU_FREQ
 static struct s5pv210_cpufreq_voltage smdkc110_cpufreq_volt[] = {
 	{
-		.freq	= 1375000,
-		.varm	= 1400000,
+		.freq	= 1320000,
+		.varm	= 1425000,
 		.vint	= 1200000,
 	}, {
-		.freq	= 1250000,
+		.freq	= 1200000,
 		.varm	= 1300000,
 		.vint	= 1150000,
 	}, {
