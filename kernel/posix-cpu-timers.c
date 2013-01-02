@@ -512,7 +512,7 @@ static void cleanup_timers(struct list_head *head,
 void posix_cpu_timers_exit(struct task_struct *tsk)
 {
 	cleanup_timers(tsk->cpu_timers,
-		       tsk->utime, tsk->stime, tsk_seruntime));
+		       tsk->utime, tsk->stime, tsk_seruntime(tsk));
 
 }
 void posix_cpu_timers_exit_group(struct task_struct *tsk)
@@ -1630,3 +1630,4 @@ static __init int init_posix_cpu_timers(void)
 	return 0;
 }
 __initcall(init_posix_cpu_timers);
+
