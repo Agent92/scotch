@@ -249,3 +249,4 @@ int spufs_coredump_extra_notes_write(struct file *file, loff_t *foffset)
 
 	return 0;
 }
+

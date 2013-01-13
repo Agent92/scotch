@@ -34,7 +34,7 @@ void set_close_on_exec(unsigned int fd, int flag)
 	if (flag)
 		FD_SET(fd, fdt->close_on_exec);
 	else
-		__clear_close_on_exec(fd, fdt);
+		FD_CLR(fd, fdt->close_on_exec);
 	spin_unlock(&files->file_lock);
 }
 
@@ -851,3 +851,4 @@ static int __init fcntl_init(void)
 }
 
 module_init(fcntl_init)
+

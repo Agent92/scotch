@@ -36,16 +36,16 @@ the fdtable structure -
 1. All references to the fdtable must be done through
    the files_fdtable() macro :
 
-	struct fdtable *fdt;
+struct fdtable *fdt;
 
-	rcu_read_lock();
+rcu_read_lock();
 
-	fdt = files_fdtable(files);
-	....
-	if (n <= fdt->max_fds)
-		....
-	...
-	rcu_read_unlock();
+fdt = files_fdtable(files);
+....
+if (n <= fdt->max_fds)
+....
+...
+rcu_read_unlock();
 
    files_fdtable() uses rcu_dereference() macro which takes care of
    the memory barrier requirements for lock-free dereference.
@@ -63,15 +63,15 @@ the fdtable structure -
    take care of barrier requirements due to lock-free lookup.
    An example :
 
-	struct file *file;
+struct file *file;
 
-	rcu_read_lock();
-	file = fcheck(fd);
-	if (file) {
-		...
-	}
-	....
-	rcu_read_unlock();
+rcu_read_lock();
+file = fcheck(fd);
+if (file) {
+...
+}
+....
+rcu_read_unlock();
 
 5. Handling of the file structures is special. Since the look-up
    of the fd (fget()/fget_light()) are lock-free, it is possible
@@ -79,18 +79,18 @@ the fdtable structure -
    file structure. This is avoided using atomic_long_inc_not_zero()
    on ->f_count :
 
-	rcu_read_lock();
-	file = fcheck_files(files, fd);
-	if (file) {
-		if (atomic_long_inc_not_zero(&file->f_count))
-			*fput_needed = 1;
-		else
-		/* Didn't get the reference, someone's freed */
-			file = NULL;
-	}
-	rcu_read_unlock();
-	....
-	return file;
+rcu_read_lock();
+file = fcheck_files(files, fd);
+if (file) {
+if (atomic_long_inc_not_zero(&file->f_count))
+*fput_needed = 1;
+else
+/* Didn't get the reference, someone's freed */
+file = NULL;
+}
+rcu_read_unlock();
+....
+return file;
 
    atomic_long_inc_not_zero() detects if refcounts is already zero or
    goes to zero during increment. If it does, we fail
@@ -108,16 +108,17 @@ the fdtable structure -
    fdtable and making the earlier fdtable pointer stale.
    For example :
 
-	spin_lock(&files->file_lock);
-	fd = locate_fd(files, file, start);
-	if (fd >= 0) {
-		/* locate_fd() may have expanded fdtable, load the ptr */
-		fdt = files_fdtable(files);
-		FD_SET(fd, fdt->open_fds);
-		FD_CLR(fd, fdt->close_on_exec);
-		spin_unlock(&files->file_lock);
-	.....
+spin_lock(&files->file_lock);
+fd = locate_fd(files, file, start);
+if (fd >= 0) {
+/* locate_fd() may have expanded fdtable, load the ptr */
+fdt = files_fdtable(files);
+FD_SET(fd, fdt->open_fds);
+FD_CLR(fd, fdt->close_on_exec);
+spin_unlock(&files->file_lock);
+.....
 
    Since locate_fd() can drop ->file_lock (and reacquire ->file_lock),
    the fdtable pointer (fdt) must be loaded after locate_fd().
+
 
