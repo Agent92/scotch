@@ -278,7 +278,7 @@ static void setup_gamma_regs(struct s5p_lcd *lcd, u16 gamma_regs[])
 		// terrible shameful hack allowing to get back standard
 		// colors without fixing the real thing properly (gamma table)
 		// it consist on a simple (negative) offset applied on v0
-	gamma_regs[c] = (adj > (gamma_offset[c]* 7/2) && (adj <=255)) ? (adj - (gamma_offset[c]*7/2)) | 0x100 : adj | 0x100;
+		gamma_regs[c] = (adj > (gamma_offset[c]* 7/2) && (adj <=255)) ? (adj - (gamma_offset[c]*7/2)) | 0x100 : adj | 0x100;
 
 		// calculate brightness value for color c
 		v255 = vx[5] = gamma_lookup(lcd, brightness, bv->v255, c);
@@ -487,7 +487,7 @@ const struct backlight_ops s5p_bl_ops = {
 void tl2796_early_suspend(struct early_suspend *h)
 {
 	struct s5p_lcd *lcd = container_of(h, struct s5p_lcd,
-		      early_suspend);
+								early_suspend);
 
 	tl2796_ldi_disable(lcd);
 
@@ -496,7 +496,7 @@ void tl2796_early_suspend(struct early_suspend *h)
 void tl2796_late_resume(struct early_suspend *h)
 {
 	struct s5p_lcd *lcd = container_of(h, struct s5p_lcd,
-		      early_suspend);
+								early_suspend);
 
 	tl2796_ldi_enable(lcd);
 
@@ -1213,3 +1213,4 @@ static void __exit tl2796_exit(void)
 
 module_init(tl2796_init);
 module_exit(tl2796_exit);
+
