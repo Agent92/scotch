@@ -82,9 +82,7 @@ static int load_script(struct linux_binprm *bprm,struct pt_regs *regs)
 	retval = copy_strings_kernel(1, &i_name, bprm);
 	if (retval) return retval; 
 	bprm->argc++;
-	retval = bprm_change_interp(interp, bprm);
-	if (retval < 0)
-		return retval;
+	bprm->interp = interp;
 
 	/*
 	 * OK, now restart the process with the interpreter's dentry.
@@ -118,3 +116,4 @@ static void __exit exit_script_binfmt(void)
 core_initcall(init_script_binfmt);
 module_exit(exit_script_binfmt);
 MODULE_LICENSE("GPL");
+

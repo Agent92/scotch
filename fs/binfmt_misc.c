@@ -176,10 +176,7 @@ static int load_misc_binary(struct linux_binprm *bprm, struct pt_regs *regs)
 		goto _error;
 	bprm->argc ++;
 
-	/* Update interp in case binfmt_script needs it. */
-	retval = bprm_change_interp(iname, bprm);
-	if (retval < 0)
-		goto _error;
+	bprm->interp = iname;	/* for binfmt_script */
 
 	interp_file = open_exec (iname);
 	retval = PTR_ERR (interp_file);
@@ -747,3 +744,4 @@ static void __exit exit_misc_binfmt(void)
 core_initcall(init_misc_binfmt);
 module_exit(exit_misc_binfmt);
 MODULE_LICENSE("GPL");
+
