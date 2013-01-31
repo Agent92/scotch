@@ -2818,11 +2818,7 @@ err_unlock_free_utd:
 		rb_erase(&utd_entry->node, &uid_tag_data_tree);
 		kfree(utd_entry);
 	}
-<<<<<<< HEAD
-err:
-=======
 err_unlock:
->>>>>>> common/android-3.0
 	spin_unlock_bh(&uid_tag_data_tree_lock);
 	return res;
 }
