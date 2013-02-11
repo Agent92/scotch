@@ -532,7 +532,7 @@ static int dhd_set_suspend(int value, dhd_pub_t *dhd)
 {
 
 #if !defined(SUPPORT_PM2_ONLY)
-	int power_mode = PM_MAX;
+	int power_mode = PM_FAST;
 #endif
 
 	/* wl_pkt_filter_enable_t	enable_parm; */
