@@ -41,7 +41,7 @@ Deadline has a starvation detector and is simple enough that it doesn't have all
 
 choice
 	prompt "Default I/O scheduler"
-	default DEFAULT_CFQ
+	default DEFAULT_DEADLINE
 	help
 	  Select the I/O scheduler which will be used by default for all
 	  block devices.
