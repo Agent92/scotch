@@ -32,10 +32,10 @@ static struct clk *dmc1_clk;
 static struct cpufreq_freqs freqs;
 static DEFINE_MUTEX(set_freq_lock);
 
-#define APLL_VAL_1320    ((1<<31)|(175<<16)|(3<<8)|(1))
-#define APLL_VAL_1096  	((1<<31)|(137<<16)|(3<<8)|(1))
-#define APLL_VAL_1000	((1<<31)|(125<<16)|(3<<8)|(1))
-#define APLL_VAL_800	((1<<31)|(100<<16)|(3<<8)|(1))
+#define APLL_VAL_1320   ((1<<31)|(330<<16)|(6<<8)|1)
+#define APLL_VAL_1096  	((1<<31)|(137<<16)|(3<<8)|1)
+#define APLL_VAL_1000	((1<<31)|(125<<16)|(3<<8)|1)
+#define APLL_VAL_800	((1<<31)|(100<<16)|(3<<8)|1)
 
 #define SLEEP_FREQ	(800 * 1000) /* Use 800MHz when entering sleep */
 
@@ -106,11 +106,11 @@ const unsigned long int_volt_max = 1300000;
 static struct s5pv210_dvs_conf dvs_conf[] = {
 	[L0] = {
 		.arm_volt   = 1425000,
-		.int_volt   = 1200000,
+		.int_volt   = 1150000,
 		},
 	[L1] = {
 		.arm_volt   = 1300000,
-		.int_volt   = 1150000,
+		.int_volt   = 1100000,
 		},
 	[L2] = {
 		.arm_volt   = 1250000,
