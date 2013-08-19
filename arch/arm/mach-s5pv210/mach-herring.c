@@ -102,8 +102,6 @@
 
 #include "herring.h"
 
-#define lcd_or_amoled_fq  56  //screen refresh rate
-
 struct class *sec_class;
 EXPORT_SYMBOL(sec_class);
 
@@ -300,7 +298,7 @@ static struct s3cfb_lcd s6e63m0 = {
 	.p_width = 52,
 	.p_height = 86,
 	.bpp = 24,
-	.freq = lcd_or_amoled_fq,
+	.freq = 60,
 	.timing = {
 		.h_fp = 16,
 		.h_bp = 16,
@@ -325,7 +323,7 @@ static struct s3cfb_lcd nt35580 = {
 	.p_width = 52,
 	.p_height = 86,
 	.bpp = 24,
-	.freq = lcd_or_amoled_fq,
+	.freq = 60,
 	.timing = {
 		.h_fp = 10,
 		.h_bp = 20,
@@ -350,7 +348,7 @@ static struct s3cfb_lcd r61408 = {
 	.p_width = 52,
 	.p_height = 86,
 	.bpp = 24,
-	.freq = lcd_or_amoled_fq,
+	.freq = 60,
 	.timing = {
 		.h_fp = 100,
 		.h_bp = 2,
