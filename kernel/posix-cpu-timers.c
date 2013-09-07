@@ -1649,4 +1649,3 @@ static __init int init_posix_cpu_timers(void)
 	return 0;
 }
 __initcall(init_posix_cpu_timers);
-

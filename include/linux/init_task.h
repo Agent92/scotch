@@ -213,6 +213,7 @@ extern struct task_group root_task_group;
 	INIT_CPUSET_SEQ							\
 }
 
+
 #define INIT_CPU_TIMERS(cpu_timers)					\
 {									\
 	LIST_HEAD_INIT(cpu_timers[0]),					\

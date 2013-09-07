@@ -1074,4 +1074,3 @@ long clock_nanosleep_restart(struct restart_block *restart_block)
 
 	return kc->nsleep_restart(restart_block);
 }
-

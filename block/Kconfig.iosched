@@ -2,6 +2,20 @@ if BLOCK
 
 menu "IO Schedulers"
 
+config IOSCHED_ROW
+	tristate "ROW I/O scheduler"
+	---help---
+	  The ROW I/O scheduler gives priority to READ requests over
+
+config IOSCHED_DEADLINE
+	tristate "Deadline I/O scheduler"
+	default y
+	---help---
+	  The deadline I/O scheduler is simple and compact. It will provide
+	  CSCAN service with FIFO expiration of requests, switching to
+	  a new point in the service tree and doing a batch of IO from there
+	  in case of expiry.
+
 config IOSCHED_CFQ
 	tristate "CFQ I/O scheduler"
 	# If BLK_CGROUP is a module, CFQ has to be built as module.
@@ -24,52 +38,29 @@ config CFQ_GROUP_IOSCHED
 	---help---
 	  Enable group IO scheduling in CFQ.
 
-config IOSCHED_ROW
-	tristate "ROW I/O scheduler"
-	---help---
-	  The ROW I/O scheduler gives priority to READ requests over the
-	  WRITE requests when dispatching, without starving WRITE requests.
-	  Requests are kept in priority queues. Dispatching is done in a RR
-	  manner when the dispatch quantum for each queue is calculated
-	  according to queue priority.
-	  Most suitable for mobile devices.
-
-config IOSCHED_DEADLINE
- tristate "Deadline I/O scheduler"
- ---help---
-Deadline has a starvation detector and is simple enough that it doesn't have all the overhead of doing rotational/costing disks algorithm. However, reads are done 2x more likely than writes as it has a algorithm based on weights in that reads must be done first if both a read and a write is detected. It has a 2:1 ratio of read to write weights coded into the scheduler (that can be tweaked - writes_starved, will include it in the next version of system_tweak). Hence it's not a fair scheduler.
-
 choice
 	prompt "Default I/O scheduler"
-	default DEFAULT_DEADLINE
+	default DEFAULT_CFQ
 	help
 	  Select the I/O scheduler which will be used by default for all
 	  block devices.
 
-	config DEFAULT_ROW
-		bool "ROW" if IOSCHED_ROW=y
-		help
-		  The ROW I/O scheduler gives priority to READ requests
-		  over the WRITE requests when dispatching, without starving
-		  WRITE requests. Requests are kept in priority queues.
-		  Dispatching is done in a RR manner when the dispatch quantum
-		  for each queue is defined according to queue priority.
-		  Most suitable for mobile devices.
+	config DEFAULT_DEADLINE
+		bool "Deadline" if IOSCHED_DEADLINE=y
 
 	config DEFAULT_CFQ
 		bool "CFQ" if IOSCHED_CFQ=y
 
-	config DEFAULT_DEADLINE
-		bool "DEADLINE" if IOSCHED_DEADLINE=y
-
+	config DEFAULT_ROW
+		bool "ROW" if IOSCHED_ROW=y
 
 endchoice
 
 config DEFAULT_IOSCHED
 	string
-	default "row" if DEFAULT_ROW
-	default "cfq" if DEFAULT_CFQ
 	default "deadline" if DEFAULT_DEADLINE
+	default "cfq" if DEFAULT_CFQ
+	default "row" if DEFAULT_ROW
 
 endmenu
 

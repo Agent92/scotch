@@ -421,4 +421,3 @@ module_exit(kspd_module_exit);
 MODULE_DESCRIPTION("MIPS KSPD");
 MODULE_AUTHOR("Elizabeth Oldham, MIPS Technologies, Inc.");
 MODULE_LICENSE("GPL");
-

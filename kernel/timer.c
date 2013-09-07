@@ -150,6 +150,7 @@ static unsigned long round_jiffies_common(unsigned long j, int cpu,
 	 * unmodified value.
 	 */
 	return time_is_after_jiffies(j) ? j : original;
+
 }
 
 /**

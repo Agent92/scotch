@@ -32,7 +32,6 @@
 #include <linux/irq.h>
 #include <linux/skbuff.h>
 #include <linux/console.h>
-#include <linux/ion.h>
 #ifdef CONFIG_FORCE_FAST_CHARGE
 #include <linux/fastchg.h>
 #endif
@@ -145,12 +144,13 @@ static int herring_notifier_call(struct notifier_block *this,
 		else if (!strcmp((char *)_cmd, "bootloader"))
 			mode = REBOOT_MODE_FAST_BOOT;
 		else
-      		   mode = 9;
+			mode = REBOOT_MODE_NONE;
 	}
 	__raw_writel(mode, S5P_INFORM6);
 
 	return NOTIFY_DONE;
 }
+
 static struct notifier_block herring_reboot_notifier = {
 	.notifier_call = herring_notifier_call,
 };
@@ -299,6 +299,7 @@ static struct s3cfb_lcd s6e63m0 = {
 	.p_height = 86,
 	.bpp = 24,
 	.freq = 60,
+
 	.timing = {
 		.h_fp = 16,
 		.h_bp = 16,
@@ -369,17 +370,14 @@ static struct s3cfb_lcd r61408 = {
 
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC0 (5120 * SZ_1K)
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC2 (5120 * SZ_1K)
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0 (8192 * SZ_1K) /* May not work for all roms */
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1 (8192 * SZ_1K) /* May not work for all roms */
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_JPEG (4096 * SZ_1K)
-
+#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0 (11264 * SZ_1K) // (11Mb 11264) (13MB 13312) 
+#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1 (11264 * SZ_1K) // 11MB will work on Slim Bean
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMD (S5PV210_LCD_WIDTH * \
 					     S5PV210_LCD_HEIGHT * 4 * \
 					     (CONFIG_FB_S3C_NR_BUFFERS + \
 						 (CONFIG_FB_S3C_NUM_OVLY_WIN * \
 						  CONFIG_FB_S3C_NUM_BUF_OVLY_WIN)))
-#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_ION (S5PV210_LCD_WIDTH * \
-+             S5PV210_LCD_HEIGHT * 4 * 3)
+#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_JPEG (4096 * SZ_1K)
 
 static struct s5p_media_device herring_media_devs[] = {
 	[0] = {
@@ -426,29 +424,19 @@ static struct s5p_media_device herring_media_devs[] = {
 	},
 };
 
-#ifdef CONFIG_ION_S5P
-  [7] = {
-    .id = S5P_MDEV_ION,
-    .name = "ion",
-    .bank = 1,
-    .memsize = S5PV210_VIDEO_SAMSUNG_MEMSIZE_ION,
-    .paddr = 0,
-  },
-#endif
-
 #ifdef CONFIG_CPU_FREQ
 static struct s5pv210_cpufreq_voltage smdkc110_cpufreq_volt[] = {
 	{
-		.freq	= 1320000,
-		.varm	= 1425000,
-		.vint	= 1150000,
+		.freq	=  1320000,
+		.varm  = 1350000,
+		.vint	= 1100000,
 	}, {
 		.freq	= 1096000,
 		.varm	= 1300000,
-		.vint	= 1100000,
+		.vint	= 1150000,
 	}, {
 		.freq	= 1000000,
-		.varm	= 1250000,
+		.varm	= 1275000,
 		.vint	= 1100000,
 	}, {
 		.freq	=  800000,
@@ -5487,41 +5475,6 @@ static struct platform_device watchdog_device = {
 	.id = -1,
 };
 
-
-#ifdef CONFIG_ION_S5P
-
-static struct ion_platform_data ion_s5p_data = {
-  .nr = 2,
-  .heaps = {
-    {
-      .type = ION_HEAP_TYPE_SYSTEM,
-      .id = ION_HEAP_TYPE_SYSTEM,
-      .name = "system",
-    },
-    {
-      .type = ION_HEAP_TYPE_CARVEOUT,
-      .id = ION_HEAP_TYPE_CARVEOUT,
-      .name = "carveout",
-    },
-  },
-};
-
-static struct platform_device ion_s5p_device = {
-  .name = "ion-s5p",
-  .id = -1,
-  .dev = {
-    .platform_data = &ion_s5p_data,
-  },
-};
-
-static void ion_s5p_set_platdata(void)
-{
-  ion_s5p_data.heaps[1].base = s5p_get_media_memory_bank(S5P_MDEV_ION, 1);
-  ion_s5p_data.heaps[1].size = s5p_get_media_memsize_bank(S5P_MDEV_ION, 1);
-}
-
-#endif /* CONFIG_ION_S5P */
-
 static struct platform_device *herring_devices[] __initdata = {
 	&watchdog_device,
 #ifdef CONFIG_FIQ_DEBUGGER
@@ -5642,10 +5595,6 @@ static struct platform_device *herring_devices[] __initdata = {
 	&samsung_asoc_dma,
 };
 
-#ifdef CONFIG_ION_S5P
-  &ion_s5p_device,
-#endif
-
 unsigned int HWREV;
 EXPORT_SYMBOL(HWREV);
 
@@ -5658,7 +5607,6 @@ static void __init herring_map_io(void)
 #ifndef CONFIG_S5P_HIGH_RES_TIMERS
 	s5p_set_timer_source(S5P_PWM3, S5P_PWM4);
 #endif
-	
 	s5p_reserve_bootmem(herring_media_devs,
 			ARRAY_SIZE(herring_media_devs), S5P_RANGE_MFC);
 #ifdef CONFIG_MTD_ONENAND
@@ -5869,10 +5817,6 @@ static void __init herring_machine_init(void)
 
 #ifdef CONFIG_ANDROID_PMEM
 	android_pmem_set_platdata();
-#endif
-
-#ifdef CONFIG_ION_S5P
-  ion_s5p_set_platdata();
 #endif
 
 	/* headset/earjack detection */

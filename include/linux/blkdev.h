@@ -275,7 +275,7 @@ struct request_queue
 	struct request_list	rq;
 
 	request_fn_proc		*request_fn;
-	request_fn_proc    *urgent_request_fn;
+	request_fn_proc		*urgent_request_fn;
 	make_request_fn		*make_request_fn;
 	prep_rq_fn		*prep_rq_fn;
 	unprep_rq_fn		*unprep_rq_fn;
@@ -351,8 +351,8 @@ struct request_queue
 	struct list_head	timeout_list;
 
 	struct queue_limits	limits;
-	bool      notified_urgent;
-	bool      dispatched_urgent;
+	bool			notified_urgent;
+	bool			dispatched_urgent;
 
 	/*
 	 * sg stuff
